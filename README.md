@@ -2,6 +2,8 @@
 
 # Client dependencies
 
+## Linux 
+
 Host need to support KVM.
 
 * `xauth`
@@ -9,13 +11,13 @@ Host need to support KVM.
 ## Build
 
 ```shell
-docker build -t docker-dev .
+docker build -t docker-flutter .
 ```
 
 ## Linux:run
 
 ```shell
-docker run --rm -it -p 8090:8090 -p 2222:22 --device /dev/kvm docker-dev
+docker run --rm -it -p 8090:8090 -p 2222:22 --device /dev/kvm docker-flutter
 ```
 
 ## Flutter

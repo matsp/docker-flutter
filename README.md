@@ -1,38 +1,30 @@
 # docker-flutter
 
+# Tags
+
+* beta
+
 # Client dependencies
 
 ## Linux 
 
 Host need to support KVM.
 
-* `xauth`
-
 ## Build
 
 ```shell
+git clone --depth 1 https://github.com/matsp/docker-flutter.git
+cd docker-flutter
 docker build -t docker-flutter .
 ```
 
 ## Linux:run
 
 ```shell
-docker run --rm -it -p 8090:8090 -p 2222:22 --device /dev/kvm docker-flutter
+docker run --rm -ti -p 42000:42000 -p 8090:8090 --device /dev/kvm -v /tmp/.X11-unix -e DISPLAY docker-flutter
 ```
 
 ## Flutter
 
-### Run flutter for web
-```shell
-flutter run -d web-server --web-port 8090 --web-hostname 0.0.0.0
-```
-
-### Run flutter for android
-```shell
-sudo /bin/sshd # start SSH server for X11 forwarding
-ssh user@localhost -X -p 2222
-
-flutter emulators --launch pixel_9.0
-flutter devices # retrieve emulator name
-flutter run -d emulator-xxx
-```
+* flutter-android-emulator
+* flutter-web

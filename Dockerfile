@@ -9,12 +9,15 @@ ENV FLUTTER_CHANNEL="beta"
 ENV FLUTTER_VERSION="1.17.0-3.4.pre"
 ENV FLUTTER_URL="https://storage.googleapis.com/flutter_infra/releases/$FLUTTER_CHANNEL/linux/flutter_linux_$FLUTTER_VERSION-$FLUTTER_CHANNEL.tar.xz"
 ENV FLUTTER_HOME="/opt/flutter"
+ENV FLUTTER_WEB_PORT="8090"
+ENV FLUTTER_DEBUG_PORT="42000"
+ENV FLUTTER_EMULATOR_NAME="emulator-5554"
 ENV PATH="$ANDROID_SDK_ROOT/cmdline-tools/tools/bin:$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/platform-tools:$ANDROID_SDK_ROOT/platforms:$FLUTTER_HOME/bin:$PATH"
 
 # install all dependencies
 ENV DEBIAN_FRONTEND="noninteractive"
 RUN apt-get update \
-  && apt-get install --yes --no-install-recommends default-jdk curl unzip sed git bash xz-utils libglvnd0 ssh xauth x11-xserver-utils libpulse0 libxcomposite1 \
+  && apt-get install --yes --no-install-recommends openjdk-14-jdk curl unzip sed git bash xz-utils libglvnd0 ssh xauth x11-xserver-utils libpulse0 libxcomposite1 libgl1-mesa-glx \
   && rm -rf /var/lib/{apt,dpkg,cache,log}
 
 # android sdk
@@ -35,6 +38,7 @@ RUN mkdir -p $ANDROID_SDK_ROOT \
       --package "system-images;android-$ANDROID_VERSION;google_apis;$ANDROID_ARCHITECTURE" \
       --tag "google_apis" \
       --abi "$ARCHITECTURE"
+      #&& echo "hw.ramSize=1024" >> /root/.android/avd/pixel_9.0.avd/config.ini
 
 # flutter
 RUN curl -o flutter.tar.xz $FLUTTER_URL \
@@ -47,20 +51,11 @@ RUN curl -o flutter.tar.xz $FLUTTER_URL \
   && yes "y" | flutter doctor --android-licenses \
   && flutter doctor
 
-# X11 ssh forwarding
-RUN sed -i \
-  -e 's/^#*\(PermitRootLogin\) .*/\1 yes/' \
-  -e 's/^#*\(X11Forwarding\) .*/\1 yes/' \
-  -e 's/^#*\(X11DisplayOffset\) .*/\1 10/' \
-  -e 's/^#*\(AllowTcpForwarding\) .*/\1 yes/' \
-  -e 's/^#*\(X11UseLocalhost\) .*/\1 no/' \
-  -e 's/^#*\(UsePAM\) .*/\1 no/' \
-  -e 's/^#*\(AddressFamily\) .*/\1 inet/' \
-       /etc/ssh/sshd_config \
-  && ssh-keygen -A \
-  && mkdir -p /var/run/sshd \
-  && echo "root:root" | chpasswd \
-  && echo "export PATH=$PATH" >> /root/.profile \
-  && echo "export ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT" >> /root/.profile
+# commands
+RUN echo "#!/bin/bash\nflutter emulators --launch pixel_9.0\nflutter run -d $FLUTTER_EMULATOR_NAME --observatory-port $FLUTTER_DEBUG_PORT" > /usr/bin/flutter-android-emulator \
+    && chmod +x /usr/bin/flutter-android-emulator \
+    && echo "#!/bin/bash\nflutter run -d web-server --web-port $FLUTTER_WEB_PORT --web-hostname 0.0.0.0 --observatory-port $FLUTTER_DEBUG_PORT" > /usr/bin/flutter-web \
+    && chmod +x /usr/bin/flutter-web
 
-CMD [ "/bin/bash" ]
+WORKDIR "/app"
+ENTRYPOINT [ "/bin/bash" ]

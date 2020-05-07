@@ -58,4 +58,4 @@ RUN echo "#!/bin/bash\nflutter emulators --launch pixel_9.0\nflutter run -d $FLU
     && chmod +x /usr/bin/flutter-web
 
 WORKDIR "/app"
-ENTRYPOINT [ "/bin/bash" ]
+ENTRYPOINT [ "flutter" ]

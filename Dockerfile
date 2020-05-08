@@ -1,5 +1,7 @@
 FROM ubuntu:20.04
 
+ENV UID=1000
+ENV GID=1000
 ENV ANDROID_TOOLS_URL="https://dl.google.com/android/repository/commandlinetools-linux-6200805_latest.zip"
 ENV ANDROID_VERSION="28"
 ENV ANDROID_BUILD_TOOLS_VERSION="28.0.3"
@@ -57,5 +59,5 @@ RUN echo "#!/bin/bash\nflutter emulators --launch pixel_9.0\nflutter run -d $FLU
     && echo "#!/bin/bash\nflutter run -d web-server --web-port $FLUTTER_WEB_PORT --web-hostname 0.0.0.0 --observatory-port $FLUTTER_DEBUG_PORT" > /usr/bin/flutter-web \
     && chmod +x /usr/bin/flutter-web
 
-WORKDIR "/app"
-ENTRYPOINT [ "flutter" ]
+COPY entrypoint.sh /usr/local/bin/
+ENTRYPOINT [ "/usr/local/bin/entrypoint.sh" ]

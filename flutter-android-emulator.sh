@@ -1,0 +1,7 @@
+#!/bin/bash
+
+flutter emulators --launch pixel_9.0
+flutter run -d $FLUTTER_EMULATOR_NAME --observatory-port $FLUTTER_DEBUG_PORT
+/bin/bash /usr/local/bin/chown.sh
+
+exit

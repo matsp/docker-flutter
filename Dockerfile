@@ -53,11 +53,8 @@ RUN curl -o flutter.tar.xz $FLUTTER_URL \
   && yes "y" | flutter doctor --android-licenses \
   && flutter doctor
 
-# commands
-RUN echo "#!/bin/bash\nflutter emulators --launch pixel_9.0\nflutter run -d $FLUTTER_EMULATOR_NAME --observatory-port $FLUTTER_DEBUG_PORT" > /usr/bin/flutter-android-emulator \
-    && chmod +x /usr/bin/flutter-android-emulator \
-    && echo "#!/bin/bash\nflutter run -d web-server --web-port $FLUTTER_WEB_PORT --web-hostname 0.0.0.0 --observatory-port $FLUTTER_DEBUG_PORT" > /usr/bin/flutter-web \
-    && chmod +x /usr/bin/flutter-web
-
 COPY entrypoint.sh /usr/local/bin/
+COPY chown.sh /usr/local/bin/
+COPY flutter-android-emulator.sh /usr/local/bin/
+COPY flutter-web.sh /usr/local/bin/
 ENTRYPOINT [ "/usr/local/bin/entrypoint.sh" ]

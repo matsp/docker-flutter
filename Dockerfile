@@ -8,7 +8,7 @@ ENV ANDROID_BUILD_TOOLS_VERSION="28.0.3"
 ENV ANDROID_ARCHITECTURE="x86_64"
 ENV ANDROID_SDK_ROOT="/opt/android"
 ENV FLUTTER_CHANNEL="beta"
-ENV FLUTTER_VERSION="1.17.0-3.4.pre"
+ENV FLUTTER_VERSION="1.18.0-11.1.pre"
 ENV FLUTTER_URL="https://storage.googleapis.com/flutter_infra/releases/$FLUTTER_CHANNEL/linux/flutter_linux_$FLUTTER_VERSION-$FLUTTER_CHANNEL.tar.xz"
 ENV FLUTTER_HOME="/opt/flutter"
 ENV FLUTTER_WEB_PORT="8090"
@@ -40,7 +40,6 @@ RUN mkdir -p $ANDROID_SDK_ROOT \
       --package "system-images;android-$ANDROID_VERSION;google_apis;$ANDROID_ARCHITECTURE" \
       --tag "google_apis" \
       --abi "$ARCHITECTURE"
-      #&& echo "hw.ramSize=1024" >> /root/.android/avd/pixel_9.0.avd/config.ini
 
 # flutter
 RUN curl -o flutter.tar.xz $FLUTTER_URL \

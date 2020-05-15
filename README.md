@@ -32,5 +32,5 @@ xhost local:$USER && docker run --rm -ti -e UID=$(id -u) -e GID=$(id -g) -p 4200
 You app will be served on localhost:8090:
 
 ```shell
-docker run --rm -ti -e UID=$(id -u) -e GID=$(id -g) -p 42000:42000 -p 8090:8090  --workdir /project -v "$PWD":/project --entrypoint flutter-web matspfeiffer/flutter
+docker run --rm -ti -e UID=$(id -u) -e GID=$(id -g) -p 42000:42000 -p 8090:8090  --workdir /project -v "$PWD":/project --entrypoint flutter-web matspfeiffer/flutter:beta
 ```

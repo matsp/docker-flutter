@@ -35,11 +35,11 @@ RUN mkdir -p $ANDROID_SDK_ROOT \
   && yes "y" | sdkmanager "emulator" \
   && yes "y" | sdkmanager "system-images;android-$ANDROID_VERSION;google_apis;$ANDROID_ARCHITECTURE" \
   && yes "no" | avdmanager create avd --force \
-      --name "pixel_9.0" \
-      --device "pixel" \
-      --package "system-images;android-$ANDROID_VERSION;google_apis;$ANDROID_ARCHITECTURE" \
-      --tag "google_apis" \
-      --abi "$ARCHITECTURE"
+  --name "pixel_9.0" \
+  --device "pixel" \
+  --package "system-images;android-$ANDROID_VERSION;google_apis;$ANDROID_ARCHITECTURE" \
+  --tag "google_apis" \
+  --abi "$ARCHITECTURE"
 
 # flutter
 RUN curl -o flutter.tar.xz $FLUTTER_URL \
@@ -54,5 +54,4 @@ RUN curl -o flutter.tar.xz $FLUTTER_URL \
 COPY entrypoint.sh /usr/local/bin/
 COPY chown.sh /usr/local/bin/
 COPY flutter-android-emulator.sh /usr/local/bin/flutter-android-emulator
-COPY flutter-web.sh /usr/local/bin/flutter-web
 ENTRYPOINT [ "/usr/local/bin/entrypoint.sh" ]

@@ -1,6 +1,6 @@
 # docker-flutter
 
-With this docker image you don't need to install flutter and the Android SDK on your developer machine. Everything is ready to use inclusive an emulator device (Pixel with Android 9). With a shell alias you will don't recognize a difference between the image and a local installation.
+With this docker image you don't need to install the Flutter and Android SDK on your developer machine. Everything is ready to use inclusive an emulator device (Pixel with Android 9). With a shell alias you won't recognize a difference between the image and a local installation.
 
 ## Supported tags
 
@@ -10,22 +10,22 @@ With this docker image you don't need to install flutter and the Android SDK on 
 ## Entrypoints
 
 - `flutter` (default)
-- `flutter-android-emulator` (only works on Linux)
-- `flutter-web` (may not work on Windows)
+- `flutter-android-emulator` (Linux only at the moment)
+- `flutter-web` (beta only)
 
 _Dependencies_
 
 When you want to run the `flutter-android-emulator` entrypoint your host must support KVM and have `xhost` installed.
 
-### flutter
+### flutter (default)
 
-Executing flutter in the current host directory:
+Executing flutter in the current directory:
 
 ```shell
 docker run --rm -e UID=$(id -u) -e GID=$(id -g) --workdir /project -v "$PWD":/project matspfeiffer/flutter
 ```
 
-When you don't set the `UID` and `GID` the files will be owned by the root user.
+When you don't set the `UID` and `GID` the files will be owned by `G-/UID=1000`.
 
 ### flutter-android-emulator
 

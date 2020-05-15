@@ -27,7 +27,7 @@ To archive the best performance we will mount the X11 directory, DRI and KVM dev
 xhost local:$USER && docker run --rm -ti -e UID=$(id -u) -e GID=$(id -g) -p 42000:42000 --workdir /project --device /dev/kvm --device /dev/dri:/dev/dri -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY -v "$PWD":/project --entrypoint flutter-android-emulator  matspfeiffer/flutter
 ```
 
-### flutter-web
+### flutter-web (beta only)
 
 You app will be served on localhost:8090:
 

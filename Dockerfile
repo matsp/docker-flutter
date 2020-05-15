@@ -19,7 +19,7 @@ ENV PATH="$ANDROID_SDK_ROOT/cmdline-tools/tools/bin:$ANDROID_SDK_ROOT/emulator:$
 # install all dependencies
 ENV DEBIAN_FRONTEND="noninteractive"
 RUN apt-get update \
-  && apt-get install --yes --no-install-recommends openjdk-14-jdk curl unzip sed git bash xz-utils libglvnd0 ssh xauth x11-xserver-utils libpulse0 libxcomposite1 libgl1-mesa-glx \
+  && apt-get install --yes --no-install-recommends default-jdk curl unzip sed git bash xz-utils libglvnd0 ssh xauth x11-xserver-utils libpulse0 libxcomposite1 libgl1-mesa-glx \
   && rm -rf /var/lib/{apt,dpkg,cache,log}
 
 # android sdk
@@ -45,7 +45,6 @@ RUN mkdir -p $ANDROID_SDK_ROOT \
 RUN curl -o flutter.tar.xz $FLUTTER_URL \
   && mkdir -p $FLUTTER_HOME \
   && tar xf flutter.tar.xz -C /opt \
-  && chown -R root:root $FLUTTER_HOME \
   && rm flutter.tar.xz \
   && flutter config --no-analytics --enable-web \
   && flutter precache \

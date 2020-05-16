@@ -10,7 +10,7 @@ With this docker image you don't need to install the Flutter and Android SDK on 
 ## Entrypoints
 
 - `flutter` (default)
-- `flutter-android-emulator` (Linux only at the moment)
+- `flutter-android-emulator`
 - `flutter-web` (beta only)
 
 _Dependencies_
@@ -28,8 +28,6 @@ docker run --rm -e UID=$(id -u) -e GID=$(id -g) --workdir /project -v "$PWD":/pr
 When you don't set the `UID` and `GID` the files will be owned by `G-/UID=1000`.
 
 ### flutter-android-emulator
-
-_THIS ONLY TESTED WITH LINUX_
 
 To archive the best performance we will mount the X11 directory, DRI and KVM device of the host to get full hardware accerlation:
 
@@ -50,3 +48,11 @@ docker run --rm -ti -e UID=$(id -u) -e GID=$(id -g) -p 42000:42000 -p 8090:8090 
 > Why not using alpine?
 
 Alpine is based on `musl` instead of `glibc`. The dart binaries packaged by flutter are linked against `glibc` so the Flutter SDK is not compatible with Alpine - it's possible to fix this but not the core attempt of this image.
+
+> Why OpenJDK 8?
+
+With higher versions the sdkmanager of the android tools throws errors while fetching maven dependencies.
+
+> Which operating systems are currently supported?
+
+Using the image to run `flutter` in the container and use Flutter for Web is working on Linux, MacOS and Windows. Starting the android emulator in the container and forward to the graphical system of the host is only working on Linux at the moment.

@@ -2,6 +2,7 @@ FROM ubuntu:20.04
 
 ENV UID=1000
 ENV GID=1000
+ENV JAVA_VERSION="8"
 ENV ANDROID_TOOLS_URL="https://dl.google.com/android/repository/commandlinetools-linux-6200805_latest.zip"
 ENV ANDROID_VERSION="28"
 ENV ANDROID_BUILD_TOOLS_VERSION="28.0.3"
@@ -19,11 +20,13 @@ ENV PATH="$ANDROID_SDK_ROOT/cmdline-tools/tools/bin:$ANDROID_SDK_ROOT/emulator:$
 # install all dependencies
 ENV DEBIAN_FRONTEND="noninteractive"
 RUN apt-get update \
-  && apt-get install --yes --no-install-recommends default-jdk curl unzip sed git bash xz-utils libglvnd0 ssh xauth x11-xserver-utils libpulse0 libxcomposite1 libgl1-mesa-glx \
+  && apt-get install --yes --no-install-recommends openjdk-$JAVA_VERSION-jdk curl unzip sed git bash xz-utils libglvnd0 ssh xauth x11-xserver-utils libpulse0 libxcomposite1 libgl1-mesa-glx \
   && rm -rf /var/lib/{apt,dpkg,cache,log}
 
 # android sdk
 RUN mkdir -p $ANDROID_SDK_ROOT \
+  && mkdir -p /root/.android \
+  && touch /root/.android/repositories.cfg \
   && curl -o android_tools.zip $ANDROID_TOOLS_URL \
   && unzip -qq -d "$ANDROID_SDK_ROOT" android_tools.zip \
   && rm android_tools.zip \

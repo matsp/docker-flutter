@@ -36,13 +36,7 @@ RUN mkdir -p $ANDROID_SDK_ROOT \
   && yes "y" | sdkmanager "platforms;android-$ANDROID_VERSION" \
   && yes "y" | sdkmanager "platform-tools" \
   && yes "y" | sdkmanager "emulator" \
-  && yes "y" | sdkmanager "system-images;android-$ANDROID_VERSION;google_apis;$ANDROID_ARCHITECTURE" \
-  && yes "no" | avdmanager create avd --force \
-  --name "pixel_9.0" \
-  --device "pixel" \
-  --package "system-images;android-$ANDROID_VERSION;google_apis;$ANDROID_ARCHITECTURE" \
-  --tag "google_apis" \
-  --abi "$ARCHITECTURE"
+  && yes "y" | sdkmanager "system-images;android-$ANDROID_VERSION;google_apis_playstore;$ANDROID_ARCHITECTURE"
 
 # flutter
 RUN curl -o flutter.tar.xz $FLUTTER_URL \
@@ -52,7 +46,8 @@ RUN curl -o flutter.tar.xz $FLUTTER_URL \
   && flutter config --no-analytics --enable-web \
   && flutter precache \
   && yes "y" | flutter doctor --android-licenses \
-  && flutter doctor
+  && flutter doctor \
+  && flutter emulators --create
 
 COPY entrypoint.sh /usr/local/bin/
 COPY chown.sh /usr/local/bin/

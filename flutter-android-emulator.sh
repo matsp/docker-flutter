@@ -1,8 +1,16 @@
 #!/bin/bash
 
-flutter emulators --launch pixel_9.0
-sleep 30
+flutter emulators --launch flutter_emulator
+
+started=0
+while [ $started -eq 0 ] 
+do 
+  sleep 1
+  started=$(flutter devices | grep emulator | wc -l)
+done
+
 flutter run -d $FLUTTER_EMULATOR_NAME --observatory-port $FLUTTER_DEBUG_PORT
+
 /bin/bash /usr/local/bin/chown.sh
 
 exit

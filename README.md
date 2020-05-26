@@ -8,6 +8,8 @@ With this docker image you don't need to install the Flutter and Android SDK on 
   - [`1.17.1`](https://github.com/matsp/docker-flutter/blob/master/stable/Dockerfile)
 - [`beta`](https://github.com/matsp/docker-flutter/tree/master/beta)
   - [`beta-1.18.0-11.1.pre`](https://github.com/matsp/docker-flutter/tree/master/beta)
+- [`dev`](https://github.com/matsp/docker-flutter/tree/master)
+  - [`beta-1.19.0-1.0.pre`](https://github.com/matsp/docker-flutter/tree/master)
 
 ## Entrypoints
 
@@ -44,6 +46,32 @@ You app will be served on localhost:8090:
 ```shell
 docker run --rm -ti -e UID=$(id -u) -e GID=$(id -g) -p 42000:42000 -p 8090:8090  --workdir /project -v "$PWD":/project --entrypoint flutter-web matspfeiffer/flutter:beta
 ```
+
+## VSCode devcontainer
+
+You can also use this image to develop inside a devcontainer in VSCode and launch the android emulator or web-server.
+
+Add this `.devcontainer/devcontainer.json` to your VSCode project - e.g. Linux:
+
+```json
+{
+  "name": "Flutter",
+  "image": "matspfeiffer/flutter:beta",
+  "extensions": ["dart-code.dart-code", "dart-code.flutter"],
+  "runArgs": [
+    "--device",
+    "/dev/kvm",
+    "--device",
+    "/dev/dri:/dev/dri",
+    "-v",
+    "/tmp/.X11-unix:/tmp/.X11-unix",
+    "-e",
+    "DISPLAY"
+  ]
+}
+```
+
+When VSCode has launched your container you have to execute `flutter emulators --launch flutter_emulator` to startup the emulator device. Afterwards you can choose it to debug your flutter code.
 
 ## FAQ
 

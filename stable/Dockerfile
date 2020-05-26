@@ -55,7 +55,8 @@ RUN curl -o flutter.tar.xz $FLUTTER_URL \
   && flutter precache \
   && yes "y" | flutter doctor --android-licenses \
   && flutter doctor \
-  && flutter emulators --create
+  && flutter emulators --create \
+  && flutter update-packages
 
 COPY entrypoint.sh /usr/local/bin/
 COPY chown.sh /usr/local/bin/

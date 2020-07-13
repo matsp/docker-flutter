@@ -5,17 +5,11 @@ With this docker image you don't need to install the Flutter and Android SDK on 
 ## Supported tags
 
 - [`latest`](https://github.com/matsp/docker-flutter/blob/master/stable/Dockerfile)
-  - [`1.17.4`](https://github.com/matsp/docker-flutter/blob/master/stable/Dockerfile)
-  - [`1.17.3`](https://github.com/matsp/docker-flutter/blob/master/stable/Dockerfile)
-  - [`1.17.2`](https://github.com/matsp/docker-flutter/blob/master/stable/Dockerfile)
-  - [`1.17.1`](https://github.com/matsp/docker-flutter/blob/master/stable/Dockerfile)
+  - [`1.17.5`](https://github.com/matsp/docker-flutter/blob/master/stable/Dockerfile)
 - [`beta`](https://github.com/matsp/docker-flutter/tree/master/beta)	
   - [`beta-1.19.0-4.1.pre`](https://github.com/matsp/docker-flutter/tree/master/beta)
-  - [`beta-1.18.0-11.1.pre`](https://github.com/matsp/docker-flutter/tree/master/beta)
 - [`dev`](https://github.com/matsp/docker-flutter/tree/master/dev)
   - [`dev-1.20.0-0.0.pre`](https://github.com/matsp/docker-flutter/tree/master/dev)
-  - [`dev-1.19.0-5.0.pre`](https://github.com/matsp/docker-flutter/tree/master/dev)
-  - [`dev-1.19.0-4.0.pre`](https://github.com/matsp/docker-flutter/tree/master/dev)
 
 ## Entrypoints
 

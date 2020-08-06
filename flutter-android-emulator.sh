@@ -1,6 +1,6 @@
 #!/bin/bash
 
-flutter emulators --launch flutter_emulator
+flutter emulators --launch $FLUTTER_EMULATOR_NAME
 
 started=0
 while [ $started -eq 0 ] 

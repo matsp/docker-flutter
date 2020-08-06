@@ -15,7 +15,7 @@ ENV FLUTTER_URL="https://storage.googleapis.com/flutter_infra/releases/$FLUTTER_
 ENV FLUTTER_HOME="/home/$USER/flutter"
 ENV FLUTTER_WEB_PORT="8090"
 ENV FLUTTER_DEBUG_PORT="42000"
-ENV FLUTTER_EMULATOR_NAME="emulator-5554"
+ENV FLUTTER_EMULATOR_NAME="flutter_emulator"
 ENV PATH="$ANDROID_SDK_ROOT/cmdline-tools/tools/bin:$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/platform-tools:$ANDROID_SDK_ROOT/platforms:$FLUTTER_HOME/bin:$PATH"
 
 # install all dependencies

@@ -1,6 +1,6 @@
 # docker-flutter
 
-With this docker image you don't need to install the Flutter and Android SDK on your developer machine. Everything is ready to use inclusive an emulator device (Pixel with Android 9). With a shell alias you won't recognize a difference between the image and a local installation. Be aware that the emulator is actually only running on Linux hosts with KVM installed. If you are using VSCode you can use this image as your devcontainer.
+With this docker image you don't need to install the Flutter and Android SDK on your developer machine. Everything is ready to use inclusive an emulator device (Pixel with Android 9). With a shell alias you won't recognize a difference between the image and a local installation. If you are using VSCode you can also use this image as your devcontainer.
 
 ## Supported tags
 
@@ -46,14 +46,18 @@ docker run --rm -ti -e UID=$(id -u) -e GID=$(id -g) -p 42000:42000 -p 8090:8090 
 
 ## VSCode devcontainer
 
-You can also use this image to develop inside a devcontainer in VSCode and launch the android emulator or web-server.
+You can also use this image to develop inside a devcontainer in VSCode and launch the android emulator or web-server. The android emulator need hardware accerlation, so their is no best practice for all common operating systems.
 
-Add this `.devcontainer/devcontainer.json` to your VSCode project - e.g. Linux:
+### Linux #1 (X11 & KVM forwarding)
+
+For developers using Linux as their OS I recommend this approach, because it's the overall cleanest way.
+
+Add this `.devcontainer/devcontainer.json` to your VSCode project:
 
 ```json
 {
   "name": "Flutter",
-  "image": "matspfeiffer/flutter:beta",
+  "image": "matspfeiffer/flutter",
   "extensions": ["dart-code.dart-code", "dart-code.flutter"],
   "runArgs": [
     "--device",
@@ -70,6 +74,32 @@ Add this `.devcontainer/devcontainer.json` to your VSCode project - e.g. Linux:
 
 When VSCode has launched your container you have to execute `flutter emulators --launch flutter_emulator` to startup the emulator device. Afterwards you can choose it to debug your flutter code.
 
+### Linux #2, Windows & MacOS (using host emulator)
+
+Add this `.devcontainer/devcontainer.json` to your VSCode project:
+
+```json
+{
+  "name": "Flutter",
+  "image": "matspfeiffer/flutter",
+  "extensions": ["dart-code.dart-code", "dart-code.flutter"]
+}
+```
+
+Start your local android emulator. Afterwards reconnect execute the following command to make it accessable via network:
+
+```shell
+adb tcpip 5555
+```
+
+In your docker container connect to device:
+
+```shell
+adb connect host.docker.internal:5555
+```
+
+You can now choose the device to start debugging.
+
 ## FAQ
 
 > Why not using alpine?
@@ -79,7 +109,3 @@ Alpine is based on `musl` instead of `glibc`. The dart binaries packaged by flut
 > Why OpenJDK 8?
 
 With higher versions the sdkmanager of the android tools throws errors while fetching maven dependencies.
-
-> Which operating systems are currently supported?
-
-Using the image to run `flutter` in the container and use Flutter for Web is working on Linux, MacOS and Windows. Starting the android emulator in the container and forward to the graphical system of the host is only working on Linux at the moment.

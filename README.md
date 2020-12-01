@@ -30,7 +30,7 @@ When you don't set the `UID` and `GID` the files will be owned by `G-/UID=1000`.
 
 ### flutter-android-emulator
 
-To archive the best performance we will mount the X11 directory, DRI and KVM device of the host to get full hardware accerlation:
+To archive the best performance we will mount the X11 directory, DRI and KVM device of the host to get full hardware acceleration:
 
 ```shell
 xhost local:$USER && docker run --rm -ti -e UID=$(id -u) -e GID=$(id -g) -p 42000:42000 --workdir /project --device /dev/kvm --device /dev/dri:/dev/dri -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY -v "$PWD":/project --entrypoint flutter-android-emulator  matspfeiffer/flutter
@@ -46,7 +46,7 @@ docker run --rm -ti -e UID=$(id -u) -e GID=$(id -g) -p 42000:42000 -p 8090:8090 
 
 ## VSCode devcontainer
 
-You can also use this image to develop inside a devcontainer in VSCode and launch the android emulator or web-server. The android emulator need hardware accerlation, so their is no best practice for all common operating systems.
+You can also use this image to develop inside a devcontainer in VSCode and launch the android emulator or web-server. The android emulator need hardware acceleration, so their is no best practice for all common operating systems.
 
 ### Linux #1 (X11 & KVM forwarding)
 

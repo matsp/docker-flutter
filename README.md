@@ -20,10 +20,10 @@ When you want to run the `flutter-android-emulator` entrypoint your host must su
 
 ### flutter (default)
 
-Executing flutter in the current directory:
+Executing e.g. `flutter help` in the current directory (appended arguments are passed to flutter in the container):
 
 ```shell
-docker run --rm -e UID=$(id -u) -e GID=$(id -g) --workdir /project -v "$PWD":/project matspfeiffer/flutter
+docker run --rm -e UID=$(id -u) -e GID=$(id -g) --workdir /project -v "$PWD":/project matspfeiffer/flutter help
 ```
 
 When you don't set the `UID` and `GID` the files will be owned by `G-/UID=1000`.

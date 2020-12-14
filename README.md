@@ -33,7 +33,7 @@ When you don't set the `UID` and `GID` the files will be owned by `G-/UID=1000`.
 Connecting to a device connected via usb is possible via:
 
 ```shell
-docker run --rm -e UID=$(id -u) -e GID=$(id -g) --workdir /project -v "$PWD":/project --privileged -v /dev/bus/usb:/dev/bus/usb matspfeiffer/flutter devices
+docker run --rm -e UID=$(id -u) -e GID=$(id -g) --workdir /project -v "$PWD":/project --device=/dev/bus -v /dev/bus/usb:/dev/bus/usb matspfeiffer/flutter devices
 ```
 
 ### flutter-android-emulator

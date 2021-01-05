@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # execute flutter with arguments
-flutter "$@"
+flutter --no-version-check "$@"
+
 
 /bin/bash /usr/local/bin/chown.sh
 

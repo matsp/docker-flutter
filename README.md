@@ -1,18 +1,30 @@
 # docker-flutter
 
-With this docker image you don't need to install the Flutter and Android SDK on your developer machine. Everything is ready to use inclusive an emulator device (Pixel with Android 9). With a shell alias you won't recognize a difference between the image and a local installation. If you are using VSCode you can also use this image as your devcontainer.
+With this container images you don't need to install the Flutter and Android SDK on your developer machine.
+Everything is ready to use inclusive an emulator device (Pixel with Android 9). With a shell alias you won't recognize 
+a difference between the image and a local installation. If you are using VSCode you can also use this image as your devcontainer.
+
+## Recommendations
+
+To have no file permission issues between your project and the container you should run the container rootless:
+
+1. [Docker rootless](https://docs.docker.com/engine/security/rootless/#rootless-docker-in-docker)
+2. [Podman rootless @arch](https://wiki.archlinux.org/index.php/Podman#Rootless_Podman)
 
 ## Supported tags
 
-- [`latest`](https://github.com/matsp/docker-flutter/blob/master/stable/Dockerfile)
-- [`beta`](https://github.com/matsp/docker-flutter/tree/master/beta)
-- [`dev`](https://github.com/matsp/docker-flutter/tree/master/dev)
+- [`latest`](https://github.com/matsp/docker-flutter/blob/master/Dockerfile.base)
+- [`stable`](https://github.com/matsp/docker-flutter/blob/master/Dockerfile.base)
+- [`beta`](https://github.com/matsp/docker-flutter/tree/master/Dockerfile.base)
+- [`dev`](https://github.com/matsp/docker-flutter/tree/master/Dockerfile.base)
+- [`stable-android`](https://github.com/matsp/docker-flutter/tree/master/Dockerfile.android)
+- [`beta-android`](https://github.com/matsp/docker-flutter/tree/master/Dockerfile.android)
+- [`dev-android`](https://github.com/matsp/docker-flutter/tree/master/Dockerfile.android)
 
 ## Entrypoints
 
 - `flutter` (default)
 - `flutter-android-emulator`
-- `flutter-web` (beta only)
 
 _Dependencies_
 
@@ -23,17 +35,15 @@ When you want to run the `flutter-android-emulator` entrypoint your host must su
 Executing e.g. `flutter help` in the current directory (appended arguments are passed to flutter in the container):
 
 ```shell
-docker run --rm -e UID=$(id -u) -e GID=$(id -g) --workdir /project -v "$PWD":/project matspfeiffer/flutter help
+docker run --rm -w /project -v "$PWD":/project matspfeiffer/flutter help
 ```
-
-When you don't set the `UID` and `GID` the files will be owned by `G-/UID=1000`.
 
 ### flutter (connected usb device)
 
 Connecting to a device connected via usb is possible via:
 
 ```shell
-docker run --rm -e UID=$(id -u) -e GID=$(id -g) --workdir /project -v "$PWD":/project --device=/dev/bus -v /dev/bus/usb:/dev/bus/usb matspfeiffer/flutter devices
+docker run --rm -w /project -v "$PWD":/project --device=/dev/bus -v /dev/bus/usb:/dev/bus/usb matspfeiffer/flutter:stable-android devices
 ```
 
 ### flutter-android-emulator
@@ -41,15 +51,13 @@ docker run --rm -e UID=$(id -u) -e GID=$(id -g) --workdir /project -v "$PWD":/pr
 To achieve the best performance we will mount the X11 directory, DRI and KVM device of the host to get full hardware acceleration:
 
 ```shell
-xhost local:$USER && docker run --rm -ti -e UID=$(id -u) -e GID=$(id -g) -p 42000:42000 --workdir /project --device /dev/kvm --device /dev/dri:/dev/dri -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY -v "$PWD":/project --entrypoint flutter-android-emulator  matspfeiffer/flutter
+xhost local:$USER && docker run -ti --rm -w /project --device /dev/kvm --device /dev/dri:/dev/dri -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY -v "$PWD":/project --entrypoint flutter-android-emulator  matspfeiffer/flutter:stable-android
 ```
 
 ### flutter-web (beta only)
 
-You app will be served on localhost:8090:
-
 ```shell
-docker run --rm -ti -e UID=$(id -u) -e GID=$(id -g) -p 42000:42000 -p 8090:8090  --workdir /project -v "$PWD":/project --entrypoint flutter-web matspfeiffer/flutter:beta
+docker run --rm -ti -p 42000:42000 -p 8090:8090 -w /project -v "$PWD":/project  matspfeiffer/flutter:beta run -d web-server --web-port 8090 --web-hostname 0.0.0.0 --observatory-port 42000
 ```
 
 ## VSCode devcontainer
@@ -65,7 +73,7 @@ Add this `.devcontainer/devcontainer.json` to your VSCode project:
 ```json
 {
   "name": "Flutter",
-  "image": "matspfeiffer/flutter",
+  "image": "matspfeiffer/flutter:stable-android",
   "extensions": ["dart-code.dart-code", "dart-code.flutter"],
   "runArgs": [
     "--device",
@@ -89,12 +97,12 @@ Add this `.devcontainer/devcontainer.json` to your VSCode project:
 ```json
 {
   "name": "Flutter",
-  "image": "matspfeiffer/flutter",
+  "image": "matspfeiffer/flutter:stable-android",
   "extensions": ["dart-code.dart-code", "dart-code.flutter"]
 }
 ```
 
-Start your local android emulator. Afterwards reconnect execute the following command to make it accessable via network:
+Start your local android emulator. Afterwards execute the following command to make it accessable via network:
 
 ```shell
 adb tcpip 5555

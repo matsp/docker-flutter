@@ -2,8 +2,6 @@ FROM ubuntu:20.04
 
 ARG FLUTTER_CHANNEL
 ARG FLUTTER_VERSION
-ENV UID=1000
-ENV GID=1000
 ENV FLUTTER_URL="https://storage.googleapis.com/flutter_infra/releases/$FLUTTER_CHANNEL/linux/flutter_linux_$FLUTTER_VERSION-$FLUTTER_CHANNEL.tar.xz"
 ENV FLUTTER_HOME="/opt/flutter"
 ENV PATH="$FLUTTER_HOME/bin:$PATH"
@@ -24,7 +22,6 @@ RUN curl -o flutter.tar.xz $FLUTTER_URL \
   && flutter precache \
   && yes "y" | flutter doctor --android-licenses
 
-COPY chown.sh /usr/local/bin/
 COPY entrypoint.sh /usr/local/bin/
 ENTRYPOINT [ "/usr/local/bin/entrypoint.sh" ]
 

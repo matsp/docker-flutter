@@ -20,17 +20,25 @@ When you want to run the `flutter-android-emulator` entrypoint your host must su
 
 ### flutter (default)
 
-Executing flutter in the current directory:
+Executing e.g. `flutter help` in the current directory (appended arguments are passed to flutter in the container):
 
 ```shell
-docker run --rm -e UID=$(id -u) -e GID=$(id -g) --workdir /project -v "$PWD":/project matspfeiffer/flutter
+docker run --rm -e UID=$(id -u) -e GID=$(id -g) --workdir /project -v "$PWD":/project matspfeiffer/flutter help
 ```
 
 When you don't set the `UID` and `GID` the files will be owned by `G-/UID=1000`.
 
+### flutter (connected usb device)
+
+Connecting to a device connected via usb is possible via:
+
+```shell
+docker run --rm -e UID=$(id -u) -e GID=$(id -g) --workdir /project -v "$PWD":/project --device=/dev/bus -v /dev/bus/usb:/dev/bus/usb matspfeiffer/flutter devices
+```
+
 ### flutter-android-emulator
 
-To archive the best performance we will mount the X11 directory, DRI and KVM device of the host to get full hardware accerlation:
+To achieve the best performance we will mount the X11 directory, DRI and KVM device of the host to get full hardware acceleration:
 
 ```shell
 xhost local:$USER && docker run --rm -ti -e UID=$(id -u) -e GID=$(id -g) -p 42000:42000 --workdir /project --device /dev/kvm --device /dev/dri:/dev/dri -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY -v "$PWD":/project --entrypoint flutter-android-emulator  matspfeiffer/flutter
@@ -46,7 +54,7 @@ docker run --rm -ti -e UID=$(id -u) -e GID=$(id -g) -p 42000:42000 -p 8090:8090 
 
 ## VSCode devcontainer
 
-You can also use this image to develop inside a devcontainer in VSCode and launch the android emulator or web-server. The android emulator need hardware accerlation, so their is no best practice for all common operating systems.
+You can also use this image to develop inside a devcontainer in VSCode and launch the android emulator or web-server. The android emulator need hardware acceleration, so their is no best practice for all common operating systems.
 
 ### Linux #1 (X11 & KVM forwarding)
 

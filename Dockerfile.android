@@ -1,3 +1,40 @@
-ARG VERSION=latest
-FROM flutter:$VERSION
+ARG TAG
+FROM matspfeiffer/flutter:$TAG
+
+ENV JAVA_VERSION="8"
+ENV ANDROID_TOOLS_URL="https://dl.google.com/android/repository/commandlinetools-linux-6858069_latest.zip"
+ENV ANDROID_VERSION="29"
+ENV ANDROID_BUILD_TOOLS_VERSION="29.0.3"
+ENV ANDROID_ARCHITECTURE="x86_64"
+ENV ANDROID_SDK_ROOT="/opt/android"
+ENV FLUTTER_EMULATOR_NAME="flutter_emulator"
+ENV PATH="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/emulator:$ANDROID_SDK_ROOT/platform-tools:$ANDROID_SDK_ROOT/platforms:$PATH"
+
+# install all dependencies
+ENV DEBIAN_FRONTEND="noninteractive"
+RUN apt-get update \
+  && apt-get install --yes --no-install-recommends openjdk-$JAVA_VERSION-jdk libglvnd0 xauth x11-xserver-utils libpulse0 libxcomposite1 libgl1-mesa-glx \
+  && rm -rf /var/lib/{apt,dpkg,cache,log}
+
+# android sdk
+RUN mkdir -p $ANDROID_SDK_ROOT \
+  && mkdir -p /root/.android \
+  && touch /root/.android/repositories.cfg \
+  && curl -o android_tools.zip $ANDROID_TOOLS_URL \
+  && unzip -qq -d "$ANDROID_SDK_ROOT" android_tools.zip \
+  && rm android_tools.zip \
+  && mkdir -p $ANDROID_SDK_ROOT/cmdline-tools/latest \
+  && mv $ANDROID_SDK_ROOT/cmdline-tools/bin $ANDROID_SDK_ROOT/cmdline-tools/latest/bin \
+  && mv $ANDROID_SDK_ROOT/cmdline-tools/lib $ANDROID_SDK_ROOT/cmdline-tools/latest/lib \
+  && yes "y" | sdkmanager "extras;google;m2repository" "extras;android;m2repository" \
+  && yes "y" | sdkmanager "build-tools;$ANDROID_BUILD_TOOLS_VERSION" \
+  && yes "y" | sdkmanager "platforms;android-$ANDROID_VERSION" \
+  && yes "y" | sdkmanager "platform-tools" \
+  && yes "y" | sdkmanager "system-images;android-$ANDROID_VERSION;google_apis_playstore;$ANDROID_ARCHITECTURE"
+
+RUN flutter emulators --create
+
+COPY flutter-android-emulator.sh /usr/local/bin/flutter-android-emulator
+ENTRYPOINT [ "/usr/local/bin/entrypoint.sh" ]
+
 

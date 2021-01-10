@@ -1,0 +1,27 @@
+FROM ubuntu:20.04
+
+ARG FLUTTER_CHANNEL
+ARG FLUTTER_VERSION
+ENV FLUTTER_URL="https://storage.googleapis.com/flutter_infra/releases/$FLUTTER_CHANNEL/linux/flutter_linux_$FLUTTER_VERSION-$FLUTTER_CHANNEL.tar.xz"
+ENV FLUTTER_HOME="/opt/flutter"
+ENV PATH="$FLUTTER_HOME/bin:$PATH"
+
+# install all dependencies
+ENV DEBIAN_FRONTEND="noninteractive"
+RUN apt-get update \
+  && apt-get install --yes --no-install-recommends curl unzip sed git bash xz-utils ca-certificates \
+  && rm -rf /var/lib/{apt,dpkg,cache,log}
+
+
+# flutter
+RUN curl -o flutter.tar.xz $FLUTTER_URL \
+  && mkdir -p $FLUTTER_HOME \
+  && tar xf flutter.tar.xz -C /opt \
+  && rm flutter.tar.xz \
+  && flutter config --no-analytics --enable-web \
+  && flutter precache \
+  && yes "y" | flutter doctor --android-licenses
+
+COPY entrypoint.sh /usr/local/bin/
+ENTRYPOINT [ "/usr/local/bin/entrypoint.sh" ]
+

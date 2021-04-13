@@ -38,8 +38,9 @@ RUN mkdir -p $ANDROID_SDK_ROOT \
   && curl -o android_tools.zip $ANDROID_TOOLS_URL \
   && unzip -qq -d "$ANDROID_SDK_ROOT" android_tools.zip \
   && rm android_tools.zip \
-  && mkdir -p $ANDROID_SDK_ROOT/cmdline-tools \
-  && mv $ANDROID_SDK_ROOT/tools $ANDROID_SDK_ROOT/cmdline-tools/tools \
+  && mkdir -p $ANDROID_SDK_ROOT/cmdline-tools/tools \
+  && mv $ANDROID_SDK_ROOT/cmdline-tools/bin $ANDROID_SDK_ROOT/cmdline-tools/tools \
+  && mv $ANDROID_SDK_ROOT/cmdline-tools/lib $ANDROID_SDK_ROOT/cmdline-tools/tools \
   && yes "y" | sdkmanager "build-tools;$ANDROID_BUILD_TOOLS_VERSION" \
   && yes "y" | sdkmanager "platforms;android-$ANDROID_VERSION" \
   && yes "y" | sdkmanager "platform-tools" \

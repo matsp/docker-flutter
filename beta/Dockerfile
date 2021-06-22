@@ -59,6 +59,7 @@ RUN curl -o flutter.tar.xz $FLUTTER_URL \
   && yes "y" | flutter doctor --android-licenses \
   && flutter doctor \
   && flutter emulators --create \
+  && echo "hw.keyboard = yes" >> /home/$USER/.android/avd/flutter_emulator.avd/config.ini \
   && flutter update-packages
 
 COPY entrypoint.sh /usr/local/bin/
